@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
                 Column(
                   children: [
                     BigText(text: "Nepal", color: Colors.blue),
-                    SmallText(text: "Kathmandu", color: Colors.black)
+                    SmallText(text: "KTM", color: Colors.black)
                   ],
                 ),
                 Center(
