@@ -57,6 +57,50 @@ class _MainBodyState extends State<MainBody> {
             activeShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)),
           ),
+        ),
+        SizedBox(height: Dimensions.height30),
+        Container(
+          margin: EdgeInsets.only(left: Dimensions.width30),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            BigText(text: "Popular"),
+            SizedBox(width: Dimensions.width10),
+            Container(
+              margin: const EdgeInsets.only(bottom: 3),
+              child: BigText(
+                text: ".",
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(width: Dimensions.width10),
+            Container(
+              margin: const EdgeInsets.only(bottom: 3),
+              child: SmallText(
+                text: "Glasses",
+                color: Colors.black,
+              ),
+            ),
+            //list of glasses
+            ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                Container(
+                    margin: EdgeInsets.only(
+                        left: Dimensions.width20, right: Dimensions.width20),
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.radius20),
+                              color: Colors.white38,
+                              image: DecorationImage(
+                                  image: AssetImage("asset/image/img2.jpg"))),
+                        )
+                      ],
+                    ));
+              },
+            )
+          ]),
         )
       ],
     );
