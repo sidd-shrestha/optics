@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:optics/home/main_body.dart';
+import 'package:optics/pages/home/main_body.dart';
 import 'package:optics/widgets/big_text.dart';
 import 'package:optics/utils/dimensions.dart';
 import 'package:optics/widgets/small_text.dart';
@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> {
             )),
       ),
       //showing the body
-      MainBody(),
+      Expanded(child: SingleChildScrollView(child: MainBody())),
     ]));
   }
 }

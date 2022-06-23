@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:optics/utils/dimensions.dart';
+import 'package:optics/widgets/app_column.dart';
 import 'package:optics/widgets/big_text.dart';
 import 'package:optics/widgets/icon_and_text_widget.dart';
 import 'package:optics/widgets/small_text.dart';
@@ -39,6 +37,7 @@ class _MainBodyState extends State<MainBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // slider section
         Container(
             // color: Colors.redAccent,
             height: Dimensions.pageView,
@@ -48,6 +47,7 @@ class _MainBodyState extends State<MainBody> {
                 itemBuilder: (context, position) {
                   return _buildPageItem(position);
                 })),
+        //dots
         new DotsIndicator(
           dotsCount: 5,
           position: _currPageValue,
@@ -73,35 +73,65 @@ class _MainBodyState extends State<MainBody> {
             ),
             SizedBox(width: Dimensions.width10),
             Container(
-              margin: const EdgeInsets.only(bottom: 3),
+              margin: const EdgeInsets.only(bottom: 2),
               child: SmallText(
                 text: "Glasses",
                 color: Colors.black,
               ),
             ),
-            //list of glasses
-            ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                Container(
-                    margin: EdgeInsets.only(
-                        left: Dimensions.width20, right: Dimensions.width20),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radius20),
-                              color: Colors.white38,
-                              image: DecorationImage(
-                                  image: AssetImage("asset/image/img2.jpg"))),
-                        )
-                      ],
-                    ));
-              },
-            )
           ]),
-        )
+        ),
+        //list of glasses
+
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: 7,
+          itemBuilder: (context, index) {
+            return Container(
+                margin: EdgeInsets.only(
+                    left: Dimensions.width20,
+                    right: Dimensions.width20,
+                    bottom: Dimensions.height10),
+                child: Row(
+                  children: [
+                    //image section
+                    Container(
+                      height: Dimensions.listViewImgSize,
+                      width: Dimensions.listViewImgSize,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radius20),
+                          color: Colors.white38,
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage("assets/image/img5.jpg"))),
+                    ),
+                    //text section
+                    Expanded(
+                      child: Container(
+                        height: Dimensions.listViewTxtSize,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(Dimensions.radius20),
+                              bottomRight:
+                                  Radius.circular(Dimensions.radius20)),
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: Dimensions.width10,
+                              right: Dimensions.width10),
+                          child: AppColumn(
+                            text: "Rayban Glasses",
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ));
+          },
+        ),
       ],
     );
   }
