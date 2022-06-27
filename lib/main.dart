@@ -3,6 +3,8 @@ import 'package:optics/pages/glasses/popular_glasses.dart';
 import 'package:optics/pages/home/main_page.dart';
 import 'package:get/get.dart';
 
+import 'pages/glasses/recommended_glasses.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PopularGlasses(),
+      home: RecommendedGlasses(),
     );
   }
 }
