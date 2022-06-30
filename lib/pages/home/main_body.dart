@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:optics/controller/popular_product_controller.dart';
-import 'package:optics/data/repo/popular_product_repo.dart';
 import 'package:optics/utils/dimensions.dart';
 import 'package:optics/widgets/app_column.dart';
 import 'package:optics/widgets/big_text.dart';
@@ -41,17 +39,15 @@ class _MainBodyState extends State<MainBody> {
     return Column(
       children: [
         // slider section
-        GetBuilder<PopularProductController>(builder: (popularProducts) {
-          return Container(
-              // color: Colors.redAccent,
-              height: Dimensions.pageView,
-              child: PageView.builder(
-                  controller: pageController,
-                  itemCount: popularProducts.PopularProductList.length,
-                  itemBuilder: (context, position) {
-                    return _buildPageItem(position);
-                  }));
-        }),
+        Container(
+            // color: Colors.redAccent,
+            height: Dimensions.pageView,
+            child: PageView.builder(
+                controller: pageController,
+                itemCount: 5,
+                itemBuilder: (context, position) {
+                  return _buildPageItem(position);
+                })),
         //dots
         new DotsIndicator(
           dotsCount: 5,
