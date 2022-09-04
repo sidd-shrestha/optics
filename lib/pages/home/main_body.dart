@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:optics/controller/popular_product_controller.dart';
 import 'package:optics/data/repo/popular_product_repo.dart';
+import 'package:optics/models/products_model.dart';
+import 'package:optics/utils/app_constants.dart';
 import 'package:optics/utils/dimensions.dart';
 import 'package:optics/widgets/app_column.dart';
 import 'package:optics/widgets/big_text.dart';
@@ -8,6 +10,7 @@ import 'package:optics/widgets/icon_and_text_widget.dart';
 import 'package:optics/widgets/small_text.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:get/get.dart';
+import 'package:optics/data/api/api.dart';
 
 class MainBody extends StatefulWidget {
   const MainBody({Key? key}) : super(key: key);
@@ -21,9 +24,11 @@ class _MainBodyState extends State<MainBody> {
   var _currPageValue = 0.0;
   double _scaleFactor = 0.8;
   double _height = Dimensions.pageViewContainer;
+  late Future<Product> futureProduct;
   @override
   void initState() {
     super.initState();
+    // futureProduct = fetchProduct();
     pageController.addListener(() {
       setState(() {
         _currPageValue = pageController.page!;
@@ -47,22 +52,28 @@ class _MainBodyState extends State<MainBody> {
               height: Dimensions.pageView,
               child: PageView.builder(
                   controller: pageController,
-                  itemCount: popularProducts.PopularProductList.length,
+                  itemCount: popularProducts.popularProductList.length,
                   itemBuilder: (context, position) {
-                    return _buildPageItem(position);
+                    return _buildPageItem(
+                        position, popularProducts.popularProductList[position]);
                   }));
         }),
         //dots
-        new DotsIndicator(
-          dotsCount: 5,
-          position: _currPageValue,
-          decorator: DotsDecorator(
-            size: const Size.square(9.0),
-            activeSize: const Size(18.0, 9.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-          ),
-        ),
+
+        GetBuilder<PopularProductController>(builder: (popularProducts) {
+          return DotsIndicator(
+            dotsCount: popularProducts.popularProductList.isEmpty
+                ? 3
+                : popularProducts.popularProductList.length,
+            position: _currPageValue,
+            decorator: DotsDecorator(
+              size: const Size.square(9.0),
+              activeSize: const Size(18.0, 9.0),
+              activeShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)),
+            ),
+          );
+        }),
         SizedBox(height: Dimensions.height30),
         Container(
           margin: EdgeInsets.only(left: Dimensions.width30),
@@ -110,7 +121,7 @@ class _MainBodyState extends State<MainBody> {
                           color: Colors.white38,
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage("assets/image/img5.jpg"))),
+                              image: AssetImage("assets/image/img6.jpg"))),
                     ),
                     //text section
                     Expanded(
@@ -141,8 +152,8 @@ class _MainBodyState extends State<MainBody> {
     );
   }
 
-  Widget _buildPageItem(int index) {
-    Matrix4 matrix = new Matrix4.identity();
+  Widget _buildPageItem(int index, ProductModel popularProduct) {
+    Matrix4 matrix = Matrix4.identity();
     if (index == _currPageValue.floor()) {
       var currScale = 1 - (_currPageValue - index) * (1 - _scaleFactor);
       var currTrans = _height * (1 - currScale) / 2;
@@ -177,9 +188,12 @@ class _MainBodyState extends State<MainBody> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Dimensions.radius30),
                 color: index.isOdd ? Colors.grey : Colors.blueGrey,
-                image: const DecorationImage(
+                image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage("assets/image/img5.jpg"))),
+                    image: AssetImage("assets/image/img6.jpg")
+                    // NetworkImage(
+                    //     AppConstants.BASE_URL + popularProduct.productImage!)
+                    )),
           ),
           Align(
             alignment: Alignment.bottomCenter,
