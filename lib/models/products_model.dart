@@ -5,7 +5,7 @@ class Product {
   // int? typeId;
   // int? offset;
   late List<ProductModel> _products;
-  List<ProductModel> get products => _products;
+  List<ProductModel> get product => _products;
 
   Product(
       {
@@ -17,9 +17,9 @@ class Product {
   }
 
   Product.fromJson(Map<String, dynamic> json) {
-    if (json['products'] != null) {
+    if (json['product'] != null) {
       _products = <ProductModel>[];
-      json['products'].forEach((v) {
+      json['product'].forEach((v) {
         _products.add(ProductModel.fromJson(v));
       });
     }

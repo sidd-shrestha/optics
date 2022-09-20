@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:optics/controller/popular_product_controller.dart';
+import 'package:optics/controller/recommended_product_controller.dart';
 import 'package:optics/data/repo/popular_product_repo.dart';
 import 'package:optics/models/products_model.dart';
+import 'package:optics/pages/glasses/popular_glasses.dart';
+import 'package:optics/routes/route_helper.dart';
 import 'package:optics/utils/app_constants.dart';
 import 'package:optics/utils/dimensions.dart';
 import 'package:optics/widgets/app_column.dart';
@@ -10,7 +15,6 @@ import 'package:optics/widgets/icon_and_text_widget.dart';
 import 'package:optics/widgets/small_text.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:get/get.dart';
-import 'package:optics/data/api/api.dart';
 
 class MainBody extends StatefulWidget {
   const MainBody({Key? key}) : super(key: key);
@@ -47,16 +51,23 @@ class _MainBodyState extends State<MainBody> {
       children: [
         // slider section
         GetBuilder<PopularProductController>(builder: (popularProducts) {
-          return Container(
-              // color: Colors.redAccent,
-              height: Dimensions.pageView,
-              child: PageView.builder(
-                  controller: pageController,
-                  itemCount: popularProducts.popularProductList.length,
-                  itemBuilder: (context, position) {
-                    return _buildPageItem(
-                        position, popularProducts.popularProductList[position]);
-                  }));
+          return popularProducts.isLoaded
+              ? Container(
+                  // color: Colors.redAccent,
+                  height: Dimensions.pageView,
+
+                  child: PageView.builder(
+                      controller: pageController,
+                      itemCount: popularProducts.popularProductList.length,
+                      itemBuilder: (context, position) {
+                        print(
+                            "=====================================================");
+                        print(popularProducts.popularProductList[0]);
+                        return _buildPageItem(position,
+                            popularProducts.popularProductList[position]);
+                      }),
+                )
+              : CircularProgressIndicator(color: Colors.blueAccent);
         }),
         //dots
 
@@ -78,7 +89,7 @@ class _MainBodyState extends State<MainBody> {
         Container(
           margin: EdgeInsets.only(left: Dimensions.width30),
           child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            BigText(text: "Popular"),
+            BigText(text: "Recommended"),
             SizedBox(width: Dimensions.width10),
             Container(
               margin: const EdgeInsets.only(bottom: 3),
@@ -97,57 +108,77 @@ class _MainBodyState extends State<MainBody> {
             ),
           ]),
         ),
+        //recommended glasses
         //list of glasses
 
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 7,
-          itemBuilder: (context, index) {
-            return Container(
-                margin: EdgeInsets.only(
-                    left: Dimensions.width20,
-                    right: Dimensions.width20,
-                    bottom: Dimensions.height10),
-                child: Row(
-                  children: [
-                    //image section
-                    Container(
-                      height: Dimensions.listViewImgSize,
-                      width: Dimensions.listViewImgSize,
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(Dimensions.radius20),
-                          color: Colors.white38,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage("assets/image/img6.jpg"))),
-                    ),
-                    //text section
-                    Expanded(
+        GetBuilder<RecommendedProductController>(builder: (recommendedProduct) {
+          return recommendedProduct.isLoaded
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: recommendedProduct.recommendedProductList.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(RouteHelper.getRecommendedProduct(index));
+                      },
                       child: Container(
-                        height: Dimensions.listViewTxtSize,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(Dimensions.radius20),
-                              bottomRight:
-                                  Radius.circular(Dimensions.radius20)),
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: Dimensions.width10,
-                              right: Dimensions.width10),
-                          child: AppColumn(
-                            text: "Rayban Glasses",
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ));
-          },
-        ),
+                          margin: EdgeInsets.only(
+                              left: Dimensions.width20,
+                              right: Dimensions.width20,
+                              bottom: Dimensions.height10),
+                          child: Row(
+                            children: [
+                              //image section
+                              Container(
+                                height: Dimensions.listViewImgSize,
+                                width: Dimensions.listViewImgSize,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.radius20),
+                                    color: Colors.white38,
+                                    image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(AppConstants
+                                                .BASE_URL +
+                                            AppConstants.UPLOAD_URL +
+                                            recommendedProduct
+                                                .recommendedProductList[index]
+                                                .productImage!))),
+                              ),
+                              //text section
+                              Expanded(
+                                child: Container(
+                                  height: Dimensions.listViewTxtSize,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(
+                                            Dimensions.radius20),
+                                        bottomRight: Radius.circular(
+                                            Dimensions.radius20)),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: Dimensions.width10,
+                                        right: Dimensions.width10),
+                                    child: AppColumn(
+                                      text: recommendedProduct
+                                          .recommendedProductList[index]
+                                          .productName!,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                    );
+                  },
+                )
+              : CircularProgressIndicator(
+                  color: Colors.blueAccent,
+                );
+        }),
       ],
     );
   }
@@ -181,19 +212,25 @@ class _MainBodyState extends State<MainBody> {
       transform: matrix,
       child: Stack(
         children: [
-          Container(
-            height: Dimensions.pageViewContainer,
-            margin: EdgeInsets.only(
-                left: Dimensions.width10, right: Dimensions.width10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radius30),
-                color: index.isOdd ? Colors.grey : Colors.blueGrey,
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/image/img6.jpg")
-                    // NetworkImage(
-                    //     AppConstants.BASE_URL + popularProduct.productImage!)
-                    )),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(RouteHelper.getPopularProduct(index));
+            },
+            child: Container(
+              height: Dimensions.pageViewContainer,
+              margin: EdgeInsets.only(
+                  left: Dimensions.width10, right: Dimensions.width10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimensions.radius30),
+                  color: index.isOdd ? Colors.grey : Colors.blueGrey,
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image:
+                          // AssetImage("assets/image/img6.jpg")
+                          NetworkImage(AppConstants.BASE_URL +
+                              AppConstants.UPLOAD_URL +
+                              popularProduct.productImage!))),
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -226,7 +263,7 @@ class _MainBodyState extends State<MainBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BigText(text: "Sunglasses"),
+                    BigText(text: popularProduct.productName!),
                     SizedBox(height: Dimensions.height10),
                     Row(
                       children: [
@@ -239,7 +276,7 @@ class _MainBodyState extends State<MainBody> {
                           );
                         })),
                         SizedBox(width: 10),
-                        SmallText(text: "4.5"),
+                        SmallText(text: popularProduct.productPrice.toString()),
                         SizedBox(width: 10),
                         SmallText(text: "222"),
                         SizedBox(width: 10),
