@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Product {
   // int? totalSize;
   // int? typeId;
@@ -94,5 +92,56 @@ class ProductModel {
     metaKeyword = json['meta_keyword'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+  }
+
+  // For local storage data
+  ProductModel.fromLocalJson(Map<String, dynamic> json) {
+    id = json['id'];
+    subcategoryId = json['subcategoryId'];
+    productCode = json['productCode'];
+    slug = json['slug'];
+    productName = json['productName'];
+    productImage = json['productImage'];
+    productQuantity = json['productQuantity'];
+    productPrice = json['productPrice'];
+    productDescription = json['productDescription'];
+    saleTag = json['saleTag'];
+    offerPrice = json['offerPrice'];
+    status = json['status'];
+    newArrivalProducts = json['newArrivalProducts'];
+    featuredProducts = json['featuredProducts'];
+    offerProducts = json['offerProducts'];
+    trending = json['trending'];
+    metaTitle = json['metaTitle'];
+    metaDescription = json['metaDescription'];
+    metaKeyword = json['metaKeyword'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": this.id,
+      "subcategoryId": this.subcategoryId,
+      "productCode": this.productCode,
+      "slug": this.slug,
+      "productName": this.productName,
+      "productImage": this.productImage,
+      "productQuantity": this.productQuantity,
+      "productPrice": this.productPrice,
+      "productDescription": this.productDescription,
+      "saleTag": this.saleTag,
+      "offerPrice": this.offerPrice,
+      "status": this.status,
+      "newArrivalProducts": this.newArrivalProducts,
+      "featuredProducts": this.featuredProducts,
+      "offerProducts": this.offerProducts,
+      "trending": this.trending,
+      "metaTitle": this.metaTitle,
+      "metaDescription": this.metaDescription,
+      "metaKeyword": this.metaKeyword,
+      "createdAt": this.createdAt,
+      "updatedAt": this.updatedAt,
+    };
   }
 }

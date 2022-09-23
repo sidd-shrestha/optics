@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:optics/utils/app_constants.dart';
-import 'package:http/http.dart' as http;
 
 class ApiClient extends GetConnect implements GetxService {
   late String token;

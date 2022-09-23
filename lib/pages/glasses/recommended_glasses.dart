@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:optics/controller/popular_product_controller.dart';
-import 'package:optics/pages/cart/cart_page.dart';
 import 'package:optics/routes/route_helper.dart';
 import 'package:optics/utils/dimensions.dart';
 import 'package:optics/widgets/app_icon.dart';
@@ -15,7 +12,9 @@ import '../../widgets/big_text.dart';
 
 class RecommendedGlasses extends StatelessWidget {
   final int pageId;
-  const RecommendedGlasses({Key? key, required this.pageId}) : super(key: key);
+  final String page;
+  const RecommendedGlasses({Key? key, required this.pageId, required this.page})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,44 +34,50 @@ class RecommendedGlasses extends StatelessWidget {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Get.toNamed(RouteHelper.initial);
+                        if (page == "cartPage") {
+                          Get.toNamed(RouteHelper.getCartPage());
+                        } else {
+                          Get.toNamed(RouteHelper.getInitial());
+                        }
                       },
                       child: AppIcon(icon: Icons.clear)),
                   // AppIcon(icon: Icons.shopping_bag)
                   GetBuilder<PopularProductController>(builder: (controller) {
-                    return Stack(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              Get.to(() => CartPage());
-                            },
-                            child: AppIcon(icon: Icons.shopping_bag_outlined)),
-                        Get.find<PopularProductController>().totalItems >= 1
-                            ? Positioned(
-                                right: 0,
-                                top: 0,
-                                child: AppIcon(
-                                  icon: Icons.circle,
-                                  size: 20,
-                                  iconColor: Colors.transparent,
-                                  bgColor: Colors.blueAccent,
-                                ),
-                              )
-                            : Container(),
-                        Get.find<PopularProductController>().totalItems >= 1
-                            ? Positioned(
-                                right: 4,
-                                top: 4,
-                                child: BigText(
-                                  text: Get.find<PopularProductController>()
-                                      .totalItems
-                                      .toString(),
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Container()
-                      ],
+                    return GestureDetector(
+                      onTap: () {
+                        if (controller.totalItems >= 1)
+                          Get.toNamed(RouteHelper.getCartPage());
+                      },
+                      child: Stack(
+                        children: [
+                          AppIcon(icon: Icons.shopping_bag_outlined),
+                          Get.find<PopularProductController>().totalItems >= 1
+                              ? Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: AppIcon(
+                                    icon: Icons.circle,
+                                    size: 20,
+                                    iconColor: Colors.transparent,
+                                    bgColor: Colors.blueAccent,
+                                  ),
+                                )
+                              : Container(),
+                          Get.find<PopularProductController>().totalItems >= 1
+                              ? Positioned(
+                                  right: 4,
+                                  top: 4,
+                                  child: BigText(
+                                    text: Get.find<PopularProductController>()
+                                        .totalItems
+                                        .toString(),
+                                    size: 12,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Container()
+                        ],
+                      ),
                     );
                   })
                 ],
@@ -109,10 +114,10 @@ class RecommendedGlasses extends StatelessWidget {
                 child: Column(
               children: [
                 Container(
-                  child:
-                      ExpandableTextWidget(text: product.productDescription!),
                   margin: EdgeInsets.only(
                       left: Dimensions.width20, right: Dimensions.width20),
+                  child:
+                      ExpandableTextWidget(text: product.productDescription!),
                 )
               ],
             ))
@@ -202,14 +207,14 @@ class RecommendedGlasses extends StatelessWidget {
                             bottom: Dimensions.height20,
                             left: Dimensions.width20,
                             right: Dimensions.width20),
-                        child: BigText(
-                          text: "\Rs. ${product.productPrice!} | Add to Cart",
-                          color: Colors.white,
-                        ),
                         decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.circular(Dimensions.radius20),
                             color: Colors.blue),
+                        child: BigText(
+                          text: "\Rs. ${product.productPrice!} | Add to Cart",
+                          color: Colors.white,
+                        ),
                       ),
                     )
                   ]),

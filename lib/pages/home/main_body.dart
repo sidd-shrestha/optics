@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:optics/controller/popular_product_controller.dart';
 import 'package:optics/controller/recommended_product_controller.dart';
-import 'package:optics/data/repo/popular_product_repo.dart';
 import 'package:optics/models/products_model.dart';
-import 'package:optics/pages/glasses/popular_glasses.dart';
 import 'package:optics/routes/route_helper.dart';
 import 'package:optics/utils/app_constants.dart';
 import 'package:optics/utils/dimensions.dart';
@@ -43,6 +39,7 @@ class _MainBodyState extends State<MainBody> {
   @override
   void dispose() {
     pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -120,7 +117,8 @@ class _MainBodyState extends State<MainBody> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.toNamed(RouteHelper.getRecommendedProduct(index));
+                        Get.toNamed(
+                            RouteHelper.getRecommendedProduct(index, "home"));
                       },
                       child: Container(
                           margin: EdgeInsets.only(
@@ -214,7 +212,7 @@ class _MainBodyState extends State<MainBody> {
         children: [
           GestureDetector(
             onTap: () {
-              Get.toNamed(RouteHelper.getPopularProduct(index));
+              Get.toNamed(RouteHelper.getPopularProduct(index, "home"));
             },
             child: Container(
               height: Dimensions.pageViewContainer,

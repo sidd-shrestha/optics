@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:optics/models/products_model.dart';
 
 Future<Product> fetchProduct() async {
   final response =

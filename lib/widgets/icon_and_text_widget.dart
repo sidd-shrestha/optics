@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:optics/utils/dimensions.dart';
 import 'package:optics/widgets/small_text.dart';
 

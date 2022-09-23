@@ -1,8 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/material/colors.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:optics/utils/dimensions.dart';
 
 class AppIcon extends StatelessWidget {
   final IconData icon;

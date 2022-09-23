@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:optics/models/products_model.dart';
 
 class CartModel {
   int? id;
@@ -10,6 +10,8 @@ class CartModel {
   String? updatedAt;
   int? quantity;
   bool? isExist;
+  String? time;
+  ProductModel? product;
 
   CartModel({
     this.id,
@@ -21,6 +23,8 @@ class CartModel {
     this.updatedAt,
     this.quantity,
     this.isExist,
+    this.time,
+    this.product,
   });
 
   CartModel.fromJson(Map<String, dynamic> json) {
@@ -33,5 +37,37 @@ class CartModel {
     updatedAt = json['updated_at'];
     quantity = json['quantity'];
     isExist = json['isExist'];
+    time = json['time'];
+    product = ProductModel.fromJson(json['product']);
+  }
+
+  CartModel.fromStorageJson(Map<String, dynamic> json) {
+    id = json['id'];
+    productName = json['productName'];
+    productImage = json['productImage'];
+    productQuantity = json['productQuantity'];
+    productPrice = json['productPrice'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    quantity = json['quantity'];
+    isExist = json['isExist'];
+    time = json['time'];
+    product = ProductModel.fromLocalJson(json['product']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": this.id,
+      "productName": this.productName,
+      "productImage": this.productImage,
+      "productQuantity": this.productQuantity,
+      "productPrice": this.productPrice,
+      "createdAt": this.createdAt,
+      "updatedAt": this.updatedAt,
+      "quantity": this.quantity,
+      "isExist": this.isExist,
+      "time": this.time,
+      "product": this.product!.toJson(),
+    };
   }
 }
